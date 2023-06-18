@@ -1,25 +1,8 @@
 import { Form } from './Form';
 import { ContactList } from './ContactList';
-// import { Filter } from './Filter';
+import { Filter } from './Filter';
 
 export function App() {
-  // export function App() {
-  //   const [contacts, setContacts] = useState(
-  //     JSON.parse(localStorage.getItem('contacts')) ?? []
-  //   );
-
-  //   useEffect(() => {
-  //     localStorage.setItem('contacts', JSON.stringify(contacts));
-  //   }, [contacts]);
-
-  //   const visibleContacts = contacts.filter(contact =>
-  //     contact.name.toLowerCase().includes(filter.toLowerCase())
-  //   );
-
-  //   const changeFilter = event => {
-  //     setFilter(event.target.value);
-  //   };
-
   return (
     <div
       style={{
@@ -52,7 +35,7 @@ export function App() {
       >
         Contacts
       </h2>
-      {/* <Filter value={filter} onChange={changeFilter} /> */}
+      <Filter />
       <ContactList />
     </div>
   );
