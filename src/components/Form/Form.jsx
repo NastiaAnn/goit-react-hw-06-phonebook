@@ -1,28 +1,32 @@
-import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { ContactsForm, FormLabel, FormText, SubmitButton } from './styled';
-import PropTypes from 'prop-types';
+import { addContacts } from 'redux/contactsSlice';
+import { useSelector } from 'react-redux';
 
-export function Form({ addUserProps }) {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+export function Form() {
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts);
 
-  const handleInputChange = event => {
-    const { name, value } = event.currentTarget;
-    if (name === 'name') {
-      setName(value);
-    } else if (name === 'number') {
-      setNumber(value);
-    }
-  };
   const handleFormSubmit = event => {
     event.preventDefault();
-    addUserProps({ name, number });
-    reset();
+    const form = event.target;
+    const name = form.elements.name.value;
+    const number = form.elements.number.value;
+
+    const isDuplicateName = contacts.some(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (isDuplicateName) {
+      alert('Contact already exists');
+      form.elements.name.value = '';
+      return;
+    }
+
+    dispatch(addContacts({ name, number }));
+    form.reset();
   };
-  const reset = () => {
-    setName('');
-    setNumber('');
-  };
+
   return (
     <ContactsForm onSubmit={handleFormSubmit}>
       <FormLabel>
@@ -33,8 +37,6 @@ export function Form({ addUserProps }) {
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
-          value={name}
-          onChange={handleInputChange}
         />
       </FormLabel>
       <FormLabel>
@@ -45,15 +47,9 @@ export function Form({ addUserProps }) {
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
-          value={number}
-          onChange={handleInputChange}
         />
       </FormLabel>
       <SubmitButton type="submit">Add contact</SubmitButton>
     </ContactsForm>
   );
 }
-
-Form.propTypes = {
-  addUserProps: PropTypes.func.isRequired,
-};

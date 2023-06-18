@@ -1,50 +1,24 @@
-import { useState, useEffect } from 'react';
-import { ContactList } from './ContactList';
 import { Form } from './Form';
-import { Filter } from './Filter';
-import { nanoid } from 'nanoid';
+import { ContactList } from './ContactList';
+// import { Filter } from './Filter';
 
 export function App() {
-  const [contacts, setContacts] = useState(
-    JSON.parse(localStorage.getItem('contacts')) ?? []
-  );
-  const [filter, setFilter] = useState('');
+  // export function App() {
+  //   const [contacts, setContacts] = useState(
+  //     JSON.parse(localStorage.getItem('contacts')) ?? []
+  //   );
 
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
+  //   useEffect(() => {
+  //     localStorage.setItem('contacts', JSON.stringify(contacts));
+  //   }, [contacts]);
 
-  const visibleContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
+  //   const visibleContacts = contacts.filter(contact =>
+  //     contact.name.toLowerCase().includes(filter.toLowerCase())
+  //   );
 
-  const deleteContact = contactId => {
-    setContacts(prevContacts =>
-      prevContacts.filter(({ id }) => id !== contactId)
-    );
-  };
-
-  const formSubmitHandler = contactData => {
-    const { name } = contactData;
-    const isDuplicateName = contacts
-      .map(contact => contact.name.toLowerCase())
-      .includes(name.toLowerCase());
-
-    if (isDuplicateName) {
-      alert('Contact already exists');
-      return;
-    } else {
-      const newContact = {
-        id: nanoid(),
-        ...contactData,
-      };
-      setContacts(prevState => [newContact, ...prevState]);
-    }
-  };
-
-  const changeFilter = event => {
-    setFilter(event.target.value);
-  };
+  //   const changeFilter = event => {
+  //     setFilter(event.target.value);
+  //   };
 
   return (
     <div
@@ -68,7 +42,7 @@ export function App() {
       >
         Phonebook
       </h1>
-      <Form addUserProps={formSubmitHandler} />
+      <Form />
       <h2
         style={{
           fontSize: '35px',
@@ -78,8 +52,8 @@ export function App() {
       >
         Contacts
       </h2>
-      <Filter value={filter} onChange={changeFilter} />
-      <ContactList contacts={visibleContacts} deleteContact={deleteContact} />
+      {/* <Filter value={filter} onChange={changeFilter} /> */}
+      <ContactList />
     </div>
   );
 }
